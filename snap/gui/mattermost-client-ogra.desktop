@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Mattermost
+Icon=${SNAP}/meta/gui/icon.png
+Exec=mattermost-client-ogra.client
+Terminal=false
+StartupWMClass=mattermost-client-ogra
+Categories=Utility;

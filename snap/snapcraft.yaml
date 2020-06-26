@@ -1,0 +1,77 @@
+name: mattermost-client-ogra
+version: '0.1'
+summary: Webapp for Mattermost
+description: |
+  Simple electron webapp to chat on mattermost with tray icon and
+  unread message count in dock icons
+base: core18
+confinement: strict
+grade: devel
+
+apps:
+  client:
+    extensions: [gnome-3-34]
+    command: desktop-launch $SNAP/electron/mattermost-client-ogra --disable-gpu --no-sandbox
+    environment:
+      TMPDIR: $XDG_RUNTIME_DIR
+    plugs:
+    - audio-playback
+    - audio-record
+    - browser-support
+    - desktop
+    - gsettings
+    - home
+    - network
+    - network-bind
+    - opengl
+    - unity7
+    - wayland
+    - x11
+
+parts:
+  client:
+    plugin: nodejs
+    source: ./electron
+    override-build: |
+      case $SNAPCRAFT_ARCH_TRIPLET in
+        "i386-linux-gnu") ARCH="ia32";;
+        "x86_64-linux-gnu") ARCH="x64";;
+        "arm-linux-gnueabihf") ARCH="armv7l";;
+        "aarch64-linux-gnu") ARCH="arm64";;
+        *) echo "ERROR: electron does not support the '$SNAPCRAFT_ARCH_TRIPLET' architecture" && exit 1;;
+      esac
+      cp icons/trayicon.png $SNAPCRAFT_PART_INSTALL/
+      cp icons/trayicon-dot.png $SNAPCRAFT_PART_INSTALL/
+      npm install electron-prompt
+      npm install electron-store
+      npm install electron-window-state
+      npm install electron-context-menu
+      npm install electron
+      npm install electron-packager
+      ./node_modules/.bin/electron-packager . --overwrite --platform=linux --arch=$ARCH --output=release-build --prune=true
+      cp -R ./mattermost-client-ogra-linux-$ARCH $SNAPCRAFT_PART_INSTALL/electron/
+    stage-packages:
+    - libasound2
+    - libgconf-2-4
+    - libnss3
+    - libunity9 # for badgeCount in dock
+    - libx11-xcb1
+    - libxss1
+    - libxtst6
+    build-packages:
+    - nodejs
+    - npm
+    - unzip
+  cleanup:
+    after: [ client ]
+    plugin: nil
+    build-snaps: [ gnome-3-28-1804 ]
+    override-prime: |
+      set -eux
+      cd /snap/gnome-3-28-1804/current
+      find . -type f,l -exec rm -f $SNAPCRAFT_PRIME/{} \;
+      for CRUFT in bug lintian man; do
+        rm -rf $SNAPCRAFT_PRIME/usr/share/$CRUFT
+      done
+      find $SNAPCRAFT_PRIME/usr/share/doc/ -type f -not -name 'copyright' -delete
+      find $SNAPCRAFT_PRIME/usr/share -type d -empty -delete

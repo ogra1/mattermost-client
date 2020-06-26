@@ -1,0 +1,26 @@
+{
+  "name": "mattermost-client-ogra",
+  "version": "0.1.0",
+  "description": "Mattermost",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/ogra1/matermost-client",
+  "keywords": [
+    "Canonical",
+    "chat",
+    "client",
+    "mattermost",
+    "dscussion"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "dependencies": {
+    "electron": "^7.2.4",
+    "electron-window-state": "latest",
+    "electron-context-menu": "latest",
+    "electron-store": "latest",
+    "electron-prompt": "latest"
+  }
+}
