@@ -2,7 +2,7 @@
 Type=Application
 Name=Mattermost
 Icon=${SNAP}/meta/gui/icon.png
-Exec=mattermost-client-ogra.client
+Exec=mattermost-client-ogra
 Terminal=false
 StartupWMClass=mattermost-client-ogra
 Categories=Utility;

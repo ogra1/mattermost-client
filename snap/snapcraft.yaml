@@ -1,9 +1,12 @@
 name: mattermost-client-ogra
-version: '0.1'
+version: '0.2'
 summary: Webapp for Mattermost
 description: |
-  Simple electron webapp to chat on mattermost with tray icon and
-  unread message count in dock icons
+  Single server, low profile electron webapp to chat on mattermost with tray
+  icon and unread message count in dock icons.
+
+  The snap comes with a mattermost-client-ogra.reset command that un-sets the
+  picked server and allows you to switch to a new one.
 base: core18
 confinement: strict
 grade: stable
@@ -15,9 +18,27 @@ architectures:
   - build-on: arm64
 
 apps:
-  client:
+  mattermost-client-ogra:
     extensions: [gnome-3-34]
     command: desktop-launch $SNAP/electron/mattermost-client-ogra --disable-gpu --no-sandbox
+    environment:
+      TMPDIR: $XDG_RUNTIME_DIR
+    plugs:
+    - audio-playback
+    - audio-record
+    - browser-support
+    - desktop
+    - gsettings
+    - home
+    - network
+    - network-bind
+    - opengl
+    - unity7
+    - wayland
+    - x11
+  reset:
+    extensions: [gnome-3-34]
+    command: desktop-launch $SNAP/electron/mattermost-client-ogra --disable-gpu --no-sandbox --reset
     environment:
       TMPDIR: $XDG_RUNTIME_DIR
     plugs:

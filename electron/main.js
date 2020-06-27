@@ -14,9 +14,10 @@ let mainWindow
 let tray = null
 var force_quit = false;
 
-if (app.commandLine.getSwitchValue('reset')) {
+if (app.commandLine.hasSwitch('reset')) {
   store.delete('server')
 }
+
 var main_url = '';
 var main_desc = 'Mattermost';
 var iconstate = 0;
@@ -166,7 +167,7 @@ if (!gotTheLock) {
       })
       .then((r) => {
         store.set('server', r);
-        if (process.argv[process.argv.length - 1] == '--reset=true') {
+        if (process.argv[process.argv.length - 1] == '--reset') {
           process.argv.pop();
           app.relaunch({args: process.argv,});
         } else {
