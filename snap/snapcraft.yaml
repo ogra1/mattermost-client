@@ -22,6 +22,7 @@ apps:
     extensions: [gnome-3-34]
     command: desktop-launch $SNAP/electron/mattermost-client-ogra --disable-gpu --no-sandbox
     environment:
+      DISABLE_WAYLAND: 1
       TMPDIR: $XDG_RUNTIME_DIR
     plugs:
     - audio-playback
@@ -40,6 +41,7 @@ apps:
     extensions: [gnome-3-34]
     command: desktop-launch $SNAP/electron/mattermost-client-ogra --disable-gpu --no-sandbox --reset
     environment:
+      DISABLE_WAYLAND: 1
       TMPDIR: $XDG_RUNTIME_DIR
     plugs:
     - audio-playback
