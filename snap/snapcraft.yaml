@@ -25,18 +25,18 @@ apps:
       DISABLE_WAYLAND: 1
       TMPDIR: $XDG_RUNTIME_DIR
     plugs:
-    - audio-playback
-    - audio-record
-    - browser-support
-    - desktop
-    - gsettings
-    - home
-    - network
-    - network-bind
-    - opengl
-    - unity7
-    - wayland
-    - x11
+      - audio-playback
+      - audio-record
+      - browser-support
+      - desktop
+      - gsettings
+      - home
+      - network
+      - network-bind
+      - opengl
+      - unity7
+      - wayland
+      - x11
   reset:
     extensions: [gnome-3-34]
     command: desktop-launch $SNAP/electron/mattermost-client-ogra --disable-gpu --no-sandbox --reset
@@ -44,53 +44,43 @@ apps:
       DISABLE_WAYLAND: 1
       TMPDIR: $XDG_RUNTIME_DIR
     plugs:
-    - audio-playback
-    - audio-record
-    - browser-support
-    - desktop
-    - gsettings
-    - home
-    - network
-    - network-bind
-    - opengl
-    - unity7
-    - wayland
-    - x11
+      - audio-playback
+      - audio-record
+      - browser-support
+      - desktop
+      - gsettings
+      - home
+      - network
+      - network-bind
+      - opengl
+      - unity7
+      - wayland
+      - x11
 
 parts:
   client:
     plugin: nodejs
     source: ./electron
+    nodejs-version: 10.21.0
+    nodejs-package-manager: npm
+    build-environment:
+      - PATH: "$PATH:$SNAPCRAFT_PART_SRC/../npm/bin"
+      - PATH: "$PATH:$SNAPCRAFT_PART_BUILD/node_modules/.bin"
     override-build: |
-      case $SNAPCRAFT_ARCH_TRIPLET in
-        "i386-linux-gnu") ARCH="ia32";;
-        "x86_64-linux-gnu") ARCH="x64";;
-        "arm-linux-gnueabihf") ARCH="armv7l";;
-        "aarch64-linux-gnu") ARCH="arm64";;
-        *) echo "ERROR: electron does not support the '$SNAPCRAFT_ARCH_TRIPLET' architecture" && exit 1;;
-      esac
-      cp icons/trayicon.png $SNAPCRAFT_PART_INSTALL/
-      cp icons/trayicon-dot.png $SNAPCRAFT_PART_INSTALL/
-      npm install electron-prompt
-      npm install electron-store
-      npm install electron-window-state
-      npm install electron-context-menu
-      npm install electron
-      npm install electron-packager
-      ./node_modules/.bin/electron-packager . --overwrite --platform=linux --arch=$ARCH --output=release-build --prune=true
-      cp -R ./mattermost-client-ogra-linux-$ARCH $SNAPCRAFT_PART_INSTALL/electron/
+      npm install --unsafe-perm
+      electron-packager . --overwrite --platform=linux --output=release-build \
+          --prune=true --out $SNAPCRAFT_PART_INSTALL/
+      mv $SNAPCRAFT_PART_INSTALL/$SNAPCRAFT_PROJECT_NAME-linux-* \
+          $SNAPCRAFT_PART_INSTALL/electron
+      cp icons/*.png $SNAPCRAFT_PART_INSTALL/
     stage-packages:
-    - libasound2
-    - libgconf-2-4
-    - libnss3
-    - libunity9 # for badgeCount in dock
-    - libx11-xcb1
-    - libxss1
-    - libxtst6
-    build-packages:
-    - nodejs
-    - npm
-    - unzip
+      - libasound2
+      - libgconf-2-4
+      - libnss3
+      - libunity9 # for badgeCount in dock
+      - libx11-xcb1
+      - libxss1
+      - libxtst6
   cleanup:
     after: [ client ]
     plugin: nil

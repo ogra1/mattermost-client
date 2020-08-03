@@ -58,7 +58,7 @@ function createWindow () {
   const contextMenu = Menu.buildFromTemplate([
     {id: 'open',
       label: 'Open ' + main_desc,
-      click: function() {mainWindow.show();app.badgeCount = 0;},
+      click: function() {mainWindow.show();},
       enabled: false
     },
     {id: 'minimize',
@@ -85,7 +85,6 @@ function createWindow () {
       mainWindow.hide()
     } else {
       mainWindow.show()
-      app.badgeCount = 0
     }
   });
 
@@ -150,7 +149,6 @@ if (!gotTheLock) {
       if (mainWindow.isMinimized()) mainWindow.restore()
       if (!mainWindow.isVisible()) mainWindow.show()
       mainWindow.focus()
-      app.badgeCount = 0
     }
   })
 
