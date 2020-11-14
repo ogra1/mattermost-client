@@ -10,6 +10,7 @@ description: |
 base: core18
 confinement: strict
 grade: stable
+compression: lzo
 
 architectures:
   - build-on: amd64
@@ -65,6 +66,7 @@ parts:
     build-environment:
       - PATH: "$PATH:$SNAPCRAFT_PART_SRC/../npm/bin"
       - PATH: "$PATH:$SNAPCRAFT_PART_BUILD/node_modules/.bin"
+      - NPM_CONFIG_UNSAFE_PERM: "true"
     override-build: |
       # workaround for build.snapcraft.io builds
       # https://bugs.launchpad.net/bugs/1886861
@@ -74,7 +76,7 @@ parts:
         export GLOBAL_AGENT_HTTPS_PROXY="${http_proxy}"
       fi
 
-      npm install --unsafe-perm
+      npm install
       electron-packager . --overwrite --platform=linux --output=release-build \
           --prune=true --out $SNAPCRAFT_PART_INSTALL/
       mv $SNAPCRAFT_PART_INSTALL/$SNAPCRAFT_PROJECT_NAME-linux-* \
