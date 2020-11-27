@@ -20,7 +20,7 @@ architectures:
 apps:
   mattermost-client-ogra:
     extensions: [gnome-3-34]
-    command: desktop-launch $SNAP/electron/mattermost-client-ogra --disable-gpu --no-sandbox
+    command: snap/command-chain/desktop-launch $SNAP/electron/mattermost-client-ogra --disable-gpu --no-sandbox
     environment:
       DISABLE_WAYLAND: 1
       TMPDIR: $XDG_RUNTIME_DIR
@@ -39,7 +39,7 @@ apps:
       - x11
   reset:
     extensions: [gnome-3-34]
-    command: desktop-launch $SNAP/electron/mattermost-client-ogra --disable-gpu --no-sandbox --reset
+    command: snap/command-chain/desktop-launch $SNAP/electron/mattermost-client-ogra --disable-gpu --no-sandbox --reset
     environment:
       DISABLE_WAYLAND: 1
       TMPDIR: $XDG_RUNTIME_DIR
@@ -59,14 +59,10 @@ apps:
 
 parts:
   client:
-    plugin: nodejs
+    plugin: nil
     source: ./electron
-    nodejs-version: 10.21.0
-    nodejs-package-manager: npm
     build-environment:
-      - PATH: "$PATH:$SNAPCRAFT_PART_SRC/../npm/bin"
       - PATH: "$PATH:$SNAPCRAFT_PART_BUILD/node_modules/.bin"
-      - NPM_CONFIG_UNSAFE_PERM: "true"
     override-build: |
       # workaround for build.snapcraft.io builds
       # https://bugs.launchpad.net/bugs/1886861
@@ -82,6 +78,8 @@ parts:
       mv $SNAPCRAFT_PART_INSTALL/$SNAPCRAFT_PROJECT_NAME-linux-* \
           $SNAPCRAFT_PART_INSTALL/electron
       cp icons/*.png $SNAPCRAFT_PART_INSTALL/
+    build-snaps:
+      - node/14/stable
     stage-packages:
       - libasound2
       - libgconf-2-4
