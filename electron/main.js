@@ -1,4 +1,4 @@
-const {app, BrowserWindow, Menu, Tray} = require('electron')
+const {app, BrowserWindow, Menu, Tray, session} = require('electron')
 const path = require('path')
 const child_process = require('child_process');
 const contextMenu = require('electron-context-menu');
@@ -46,11 +46,15 @@ function createWindow () {
     'height': mainWindowState.height,
     'icon': path.join(process.env["SNAP"], 'meta/gui/icon.png'),
     webPreferences: {
-      'preload': path.join(process.env["SNAP"], 'electron', 'resources', 'app', 'preload.js')
+      'preload': path.join(process.env["SNAP"], 'electron', 'resources', 'app', 'preload.js'),
+      'spellcheck': true
     }
   })
 
   mainWindow.loadURL(main_url)
+
+  const ses = mainWindow.webContents.session
+  ses.setSpellCheckerLanguages(['en-US'])
 
   iconPath = path.join(process.env["SNAP"], 'trayicon.png');
   tray = new Tray(iconPath)
