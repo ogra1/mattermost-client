@@ -1,5 +1,5 @@
 name: mattermost-client-ogra
-version: '0.2'
+version: '0.3'
 summary: Webapp for Mattermost
 description: |
   Single server, low profile electron webapp to chat on mattermost with tray
