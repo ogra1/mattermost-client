@@ -20,7 +20,7 @@ architectures:
 apps:
   mattermost-client-ogra:
     extensions: [gnome-3-34]
-    command: snap/command-chain/desktop-launch $SNAP/electron/mattermost-client-ogra --disable-gpu --no-sandbox
+    command: electron/mattermost-client-ogra --disable-gpu --no-sandbox
     environment:
       DISABLE_WAYLAND: 1
       TMPDIR: $XDG_RUNTIME_DIR
@@ -39,7 +39,7 @@ apps:
       - x11
   reset:
     extensions: [gnome-3-34]
-    command: snap/command-chain/desktop-launch $SNAP/electron/mattermost-client-ogra --disable-gpu --no-sandbox --reset
+    command: electron/mattermost-client-ogra --disable-gpu --no-sandbox --reset
     environment:
       DISABLE_WAYLAND: 1
       TMPDIR: $XDG_RUNTIME_DIR
