@@ -24,19 +24,14 @@ apps:
     environment:
       DISABLE_WAYLAND: 1
       TMPDIR: $XDG_RUNTIME_DIR
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libunity
     plugs:
-      - audio-playback
       - audio-record
       - browser-support
-      - desktop
-      - gsettings
       - home
       - network
       - network-bind
-      - opengl
       - unity7
-      - wayland
-      - x11
   reset:
     extensions: [gnome-3-38]
     command: electron/mattermost-client-ogra --disable-gpu --no-sandbox --reset
@@ -44,18 +39,12 @@ apps:
       DISABLE_WAYLAND: 1
       TMPDIR: $XDG_RUNTIME_DIR
     plugs:
-      - audio-playback
       - audio-record
       - browser-support
-      - desktop
-      - gsettings
       - home
       - network
       - network-bind
-      - opengl
       - unity7
-      - wayland
-      - x11
 
 parts:
   client:
