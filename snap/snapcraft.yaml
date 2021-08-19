@@ -26,6 +26,7 @@ apps:
       TMPDIR: $XDG_RUNTIME_DIR
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libunity
     plugs:
+      - audio-playback
       - audio-record
       - browser-support
       - home
