@@ -97,7 +97,7 @@ function createWindow () {
   var wc = mainWindow.webContents;
 
   wc.on('will-navigate', function(e, url) {
-    if(url.indexOf(main_url) != 0) {
+    if((url.indexOf(main_url) != 0) && (!url.indexOf('login.ubuntu.com') != 0)) {
       e.preventDefault();
       child_process.execSync('xdg-open ' + url);
     }
