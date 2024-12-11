@@ -7,45 +7,46 @@ description: |
 
   The snap comes with a mattermost-client-ogra.reset command that un-sets the
   picked server and allows you to switch to a new one.
-base: core20
+base: core24
 confinement: strict
 grade: stable
 compression: lzo
 
-architectures:
-  - build-on: amd64
-  - build-on: armhf
-  - build-on: arm64
+platforms:
+  amd64:
+  arm64:
 
 apps:
   mattermost-client-ogra:
-    extensions: [gnome-3-38]
+    extensions: [gnome]
     command: electron/mattermost-client-ogra --disable-gpu --no-sandbox
     environment:
-      DISABLE_WAYLAND: 1
       TMPDIR: $XDG_RUNTIME_DIR
-      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libunity
     plugs:
       - audio-playback
       - audio-record
-      - browser-support
       - home
       - network
-      - network-bind
       - unity7
+      - shmem
+
   reset:
-    extensions: [gnome-3-38]
+    extensions: [gnome]
     command: electron/mattermost-client-ogra --disable-gpu --no-sandbox --reset
     environment:
-      DISABLE_WAYLAND: 1
       TMPDIR: $XDG_RUNTIME_DIR
     plugs:
       - audio-record
-      - browser-support
+      - audio-playback
       - home
       - network
-      - network-bind
       - unity7
+      - shmem
+
+plugs:
+  shmem:
+    interface: shared-memory
+    private: true
 
 parts:
   client:
@@ -70,25 +71,21 @@ parts:
           $SNAPCRAFT_PART_INSTALL/electron
       cp icons/*.png $SNAPCRAFT_PART_INSTALL/
     build-snaps:
-      - node/14/stable
+      - node/18/stable
     stage-packages:
       - libasound2
-      - libgconf-2-4
       - libnss3
       - libunity9 # for badgeCount in dock
       - libx11-xcb1
       - libxss1
       - libxtst6
+      - libproxy1v5
   cleanup:
     after: [ client ]
     plugin: nil
-    build-snaps: [ gnome-3-38-2004 ]
+    build-snaps: [ gnome-46-2404 ]
     override-prime: |
-      set -eux
-      cd /snap/gnome-3-38-2004/current
-      find . -type f,l -exec rm -f $SNAPCRAFT_PRIME/{} \;
-      for CRUFT in bug lintian man; do
-        rm -rf $SNAPCRAFT_PRIME/usr/share/$CRUFT
-      done
-      find $SNAPCRAFT_PRIME/usr/share/doc/ -type f -not -name 'copyright' -delete
-      find $SNAPCRAFT_PRIME/usr/share -type d -empty -delete
+        chmod +rx electron
+        set -eux
+        cd /snap/gnome-46-2404/current
+        find . -type f,l -exec rm -f $SNAPCRAFT_PRIME/{} \;
